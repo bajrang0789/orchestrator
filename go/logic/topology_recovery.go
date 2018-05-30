@@ -1005,7 +1005,7 @@ func executeCheckAndRecoverFunction(analysisEntry inst.ReplicationAnalysis, cand
 	case inst.FirstTierSlaveFailingToConnectToMaster:
 		go emergentlyReadTopologyInstance(&analysisEntry.AnalyzedInstanceMasterKey, analysisEntry.Analysis)
 	case inst.UnreachableMasterWithStaleSlaves:
-		checkAndRecoverFunction = checkAndRecoverUnreachableMasterWithStaleSlaves
+		checkAndRecoverFunction = checkAndRecoverDeadMaster 
 	}
 	// Right now this is mostly causing noise with no clear action.
 	// Will revisit this in the future.
