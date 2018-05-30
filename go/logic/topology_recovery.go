@@ -307,7 +307,7 @@ func RecoverDeadMaster(topologyRecovery *TopologyRecovery, skipProcesses bool) (
 
 	log.Debugf("topology_recovery: RecoverDeadMaster: will recover %+v", *failedInstanceKey)
 
-	var masterRecoveryType MasterRecoveryType = MasterRecoveryPseudoGTID
+	var masterRecoveryType MasterRecoveryType = MasterRecoveryBinlogServer
 	if analysisEntry.OracleGTIDImmediateTopology || analysisEntry.MariaDBGTIDImmediateTopology {
 		masterRecoveryType = MasterRecoveryGTID
 	} else if analysisEntry.BinlogServerImmediateTopology {
@@ -1119,9 +1119,6 @@ func ForceMasterTakeover(clusterName string, destination *inst.Instance) (topolo
 	}
 	clusterMaster := clusterMasters[0]
 
-	if !destination.MasterKey.Equals(&clusterMaster.Key) {
-		return nil, fmt.Errorf("You may only promote a direct child of the master %+v. The master of %+v is %+v.", clusterMaster.Key, destination.Key, destination.MasterKey)
-	}
 	log.Debugf("Will demote %+v and promote %+v instead", clusterMaster.Key, destination.Key)
 
 	recoveryAttempted, topologyRecovery, err := ForceExecuteRecovery(clusterName, inst.DeadMaster, &clusterMaster.Key, &destination.Key, false)
