@@ -1961,7 +1961,7 @@ func isValidAsCandidateMasterInBinlogServerTopology(slave *Instance) bool {
 	if !slave.LogBinEnabled {
 		return false
 	}
-	if slave.LogSlaveUpdatesEnabled {
+	if !slave.LogSlaveUpdatesEnabled {
 		// That's right: we *disallow* log-slave-updates
 		return false
 	}
